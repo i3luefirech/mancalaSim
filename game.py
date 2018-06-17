@@ -49,8 +49,8 @@ class GameModel:
                 self.allbeans[int(self.allfields / 2) - 1] += wonbeans
             index += 1
         self.currentPlayer = self.p2
-        if not isinstance(self.currentPlayer, numbers.Number):
-            print("run bot next movew")
+        if self.currentPlayer.ptype > 0:
+            print("run bot next moves")
             self.p2.nextMove()
 
     def do_move_p2(self, move):
@@ -71,13 +71,14 @@ class GameModel:
                 self.allbeans[index] = 0
                 # add values from vis a vis
                 diff = self.allfields - 1 - index
-                print("diff "+ str(diff))
+                print("diff " + str(diff))
                 wonbeans = self.allbeans[-1 + diff]
                 self.allbeans[-1 + diff] = 0
                 self.allbeans[self.allfields - 1] += wonbeans
             index += 1
         self.currentPlayer = self.p1
-        if not isinstance(self.currentPlayer, numbers.Number):
+        print("test")
+        if self.currentPlayer.ptype > 0:
             print("run bot next movew")
             self.p1.nextMove()
 
@@ -97,3 +98,9 @@ class GameModel:
                 print("unknown player")
         else:
             print("not your turn")
+
+    def get_possiblemoves(self, gamemodel):
+        if gamemodel is not None:
+            print("calc from gamefield")
+        else:
+            print("calc from self")

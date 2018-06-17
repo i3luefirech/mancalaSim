@@ -1,6 +1,7 @@
 import numbers
 from tkinter import *
 from game import GameModel
+from player import Player
 
 
 class MancalaView:
@@ -27,13 +28,13 @@ class MancalaView:
 
     def on_p1click(self, idx):
         # if real player do click function
-        if isinstance(self.gamep1, numbers.Number):
+        if self.gamep1.ptype == 0:
             print("red p1 button move: " + str(idx))
             self.gamemodel.do_move(self.gamep1, idx)
 
     def on_p2click(self, idx):
         # if real player do click function
-        if isinstance(self.gamep2, numbers.Number):
+        if self.gamep2.ptype == 0:
             print("blue p2 button move: " + str(idx))
             self.gamemodel.do_move(self.gamep2, idx)
 
@@ -111,8 +112,8 @@ class MancalaView:
 
 
 # create the game
-player1 = 1
-player2 = 2
+player1 = Player(0)
+player2 = Player(0)
 
 mancalagame = MancalaView()
 mancalagame.create_view(4, 6)
