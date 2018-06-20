@@ -21,7 +21,7 @@ class GameModel:
         self.currentPlayer = self.p1
 
         for x in range(0, self.allfields):
-            if x == (self.allfields / 2) - 1 or x == self.allfields - 1:
+            if x == int(self.allfields / 2) - 1 or x == self.allfields - 1:
                 self.allbeans.append(0)
             else:
                 self.allbeans.append(self.startbeans)
@@ -39,14 +39,15 @@ class GameModel:
                 index = 0
             self.allbeans[index] += 1
             playbeans -= 1
-            if playbeans == 0 and self.allbeans[index] == 1 and (self.allfields / 2) - 1 != index:
-                self.allbeans[int(self.allfields / 2) - 1] += 1
-                self.allbeans[index] = 0
-                # add values from vis a vis
-                diff = self.fields - index
-                wonbeans = self.allbeans[self.fields + diff]
-                self.allbeans[self.fields + diff] = 0
-                self.allbeans[int(self.allfields / 2) - 1] += wonbeans
+            if playbeans == 0 and self.allbeans[index] == 1 and int(self.allfields / 2) - 1 != index:
+                if 0 <= index < self.fields:
+                    self.allbeans[int(self.allfields / 2) - 1] += 1
+                    self.allbeans[index] = 0
+                    # add values from vis a vis
+                    diff = self.fields - index
+                    wonbeans = self.allbeans[self.fields + diff]
+                    self.allbeans[self.fields + diff] = 0
+                    self.allbeans[int(self.allfields / 2) - 1] += wonbeans
             index += 1
         self.currentPlayer = self.p2
         if self.currentPlayer.ptype > 0:
@@ -60,21 +61,22 @@ class GameModel:
         self.allbeans[move] = 0
         index = move + 1
         while playbeans > 0:
-            if (self.allfields / 2) - 1 == index:
+            if int(self.allfields / 2) - 1 == index:
                 index += 1
             if self.allfields == index:
                 index = 0
             self.allbeans[index] += 1
             playbeans -= 1
             if playbeans == 0 and self.allbeans[index] == 1 and self.allfields - 1 != index:
-                self.allbeans[self.allfields - 1] += 1
-                self.allbeans[index] = 0
-                # add values from vis a vis
-                diff = self.allfields - 1 - index
-                print("diff " + str(diff))
-                wonbeans = self.allbeans[-1 + diff]
-                self.allbeans[-1 + diff] = 0
-                self.allbeans[self.allfields - 1] += wonbeans
+                if int(self.allfields / 2) <= index < self.allfields - 1:
+                    self.allbeans[self.allfields - 1] += 1
+                    self.allbeans[index] = 0
+                    # add values from vis a vis
+                    diff = self.allfields - 1 - index
+                    print("diff " + str(diff))
+                    wonbeans = self.allbeans[-1 + diff]
+                    self.allbeans[-1 + diff] = 0
+                    self.allbeans[self.allfields - 1] += wonbeans
             index += 1
         self.currentPlayer = self.p1
         print("test")
@@ -90,7 +92,7 @@ class GameModel:
                 else:
                     print("not allowed!!!!")
             elif player == self.p2:
-                if self.allfields / 2 <= move < self.allfields - 1 and self.allbeans[move] > 0:
+                if int(self.allfields / 2) <= move < self.allfields - 1 and self.allbeans[move] > 0:
                     self.do_move_p2(move)
                 else:
                     print("not allowed!!!! ")
@@ -99,8 +101,19 @@ class GameModel:
         else:
             print("not your turn")
 
-    def get_possiblemoves(self, gamemodel):
-        if gamemodel is not None:
-            print("calc from gamefield")
-        else:
-            print("calc from self")
+    def get_possiblemoves(self):
+        moves_list = []
+
+        if self.currentPlayer is self.p1:
+            allbeans = self.allbeans
+            for x in range(0, int(self.allfields / 2) - 1):
+                if allbeans[x] > 0:
+                    moves_list.append(x)
+
+        if self.currentPlayer is self.p1:
+            allbeans = self.allbeans
+            for x in range(int(self.allfields / 2), self.allfields - 1):
+                if allbeans[x] > 0:
+                    moves_list.append(x)
+
+        return moves_list

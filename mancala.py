@@ -3,6 +3,9 @@ from tkinter import *
 from game import GameModel
 from player import Player
 
+MAXPLAYER = 0
+MINPLAYER = 1
+
 
 class MancalaView:
     gamebeans = 4
@@ -16,6 +19,8 @@ class MancalaView:
     gamepadding = 20
     gameipadding = 10
     gamemodel = None
+
+    first = TRUE
 
     def __init__(self):
         # create window for view
@@ -37,6 +42,10 @@ class MancalaView:
         if self.gamep2.ptype == 0:
             print("blue p2 button move: " + str(idx))
             self.gamemodel.do_move(self.gamep2, idx)
+
+    def firstmove(self):
+        if self.gamemodel.currentPlayer.ptype > 0:
+            self.gamemodel.p1.nextMove()
 
     def create_view(self, beans, fields):
         self.gamebeans = beans
@@ -108,13 +117,21 @@ class MancalaView:
                     x.configure(bg=self.gamewindow.cget('bg'), fg=self.gamewindow.cget('bg'))
             cnt += 1
 
+        if self.first:
+            self.gamep1.setGame(self.gamemodel)
+            self.gamep2.setGame(self.gamemodel)
+            self.firstmove()
+            self.first = FALSE
+
         self.gamewindow.after(self.gamerefreshdelay, self.update_view)
 
 
 # create the game
-player1 = Player(0)
-player2 = Player(0)
 
 mancalagame = MancalaView()
 mancalagame.create_view(4, 6)
+
+player1 = Player(1, MAXPLAYER)
+player2 = Player(0, MINPLAYER)
+
 mancalagame.create_game(player1, player2)
