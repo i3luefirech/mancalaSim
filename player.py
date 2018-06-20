@@ -1,7 +1,13 @@
 import random
+import time
+import threading
 
 from gametree import GameTree
 
+def threaded(fn):
+    def wrapper(*args, **kwargs):
+        threading.Thread(target=fn, args=args, kwargs=kwargs).start()
+    return wrapper
 
 class Player:
 
@@ -29,6 +35,7 @@ class Player:
         if self.ptype > 0:
             self.tree.createTree(game)
 
+    @threaded
     def nextMove(self):
         print("calc next move")
         realmove = -1
@@ -49,5 +56,5 @@ class Player:
                     print("no beans next")
                     self.i += 1
                     count += 1
+        time.sleep(5)
         self.game.do_move(self, realmove)
-        self.i += 1

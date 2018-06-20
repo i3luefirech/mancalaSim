@@ -6,6 +6,9 @@ class GameModel:
     allfields = 0
     startbeans = 0
     allbeans = []
+    beans_start = 0
+    beans_in = 0
+    beans_out = 0
 
     currentPlayer = None
     p1 = None
@@ -19,6 +22,9 @@ class GameModel:
         self.p1 = p1
         self.p2 = p2
         self.currentPlayer = self.p1
+        self.beans_start = beans * fields * 2
+        self.beans_in = self.beans_start
+        self.beans_out = 0
 
         for x in range(0, self.allfields):
             if x == int(self.allfields / 2) - 1 or x == self.allfields - 1:
